@@ -2,10 +2,10 @@ import pandas as pd
 from typing import Final
 from telegram import Update
 from telegram.ext import Application, MessageHandler, CommandHandler, filters, ContextTypes
-TOKEN: Final = '6983840137:AAG8VNEivW76g0R0NdtDVYMitz2fVxBuZqw'
+import os
+
+my_variable = os.environ.get("TOKEN")
 BOT_USERANME: Final = '@arabdict1_bot'
-
-
 
 
 #commands
