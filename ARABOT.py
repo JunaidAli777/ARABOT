@@ -5,6 +5,7 @@ from telegram.ext import Application, MessageHandler, CommandHandler, filters, C
 import os
 from fuzzywuzzy import fuzz, process
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 my_variable = os.getenv('TOKEN')
@@ -18,11 +19,18 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('I am an arabic language dictionary bot, give me a word in english and I can translate it into arabic and vice versa')
 
+#deleting the harakaat(diacritical marks) from the arabic words
+def deletion_of_harakaat(word):
+    harakaat = r'[\u064B-\u065F\u0670]'
+    clean_word = re.sub(harakaat, '', word)
+    return clean_word
+
+
 #finding the related words
 def collecting_related_words(user_text, custom_data_dict):
     words_list = [str(key) for key in custom_data_dict]
     related_words_with_scores = process.extract(str(user_text), words_list, scorer=fuzz.ratio)
-    related_words = [word for word, score in related_words_with_scores if word != user_text and score >= 75]
+    related_words = [word for word, score in related_words_with_scores if word != user_text and score >= 70]
     return related_words
 
 #handling data
@@ -53,29 +61,31 @@ async def handle_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         if user_text in custom_data_dict:
             bot_response = ', '.join(custom_data_dict[user_text])
-            await update.message.reply_text(f'The meaning(s) of the word, {user_text} is/are {bot_response} \n \n Related Words:\n \n {related_words_links}', parse_mode="HTML")
+            await update.message.reply_text(f'The meaning(s) of the word, {user_text} is/are {bot_response} \n \n Similar Words:\n \n {related_words_links}', parse_mode="HTML")
                 
         else:
             if '-' in user_text or ' ' in user_text:
                 await update.message.reply_text(f'Sorry, For the time being I can respond to only one word per text')
             elif related_words_links:   
-                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few related words: \n \n {related_words_links}')
+                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words: \n \n {related_words_links}')
             else:
                 await update.message.reply_text(f'Sorry, This word does not exist in the dictionary')
+    
     elif isinstance(user_text, str) and not user_text.isascii():
-        file_path = '/home/qaiser-server/Documents/modified_ar-eng.xlsx'
+        file_path = '/home/qaiser-server/Documents/modified2_ar-eng.xlsx'
         custom_data_dict = handling_data(file_path)
+        user_text = deletion_of_harakaat(user_text)
         related_words = collecting_related_words(user_text, custom_data_dict)
         related_words_links = ' '.join([f'<a href="tg://sendmessage?text={word}">{word}</a>' for word in related_words])
 
         if user_text in custom_data_dict:
             bot_response = ', '.join(custom_data_dict[user_text])
-            await update.message.reply_text(f'The meaning(s) of the word, {user_text} is/are {bot_response} \n \n Related Words: \n \n {related_words_links}', parse_mode="HTML")
+            await update.message.reply_text(f'The meaning(s) of the word, {user_text} is/are {bot_response} \n \n Similar Words: \n \n {related_words_links}', parse_mode="HTML")
         else:
             if '-' in user_text or ' ' in user_text:
                 await update.message.reply_text(f'Sorry, For the time being I can respond to only one word per text')
             elif related_words_links:
-                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few related words: \n \n {related_words_links}')
+                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words: \n \n {related_words_links}')
             else:
                 await update.message.reply_text(f'Sorry, This word does not exist in the dictionary')
 
