@@ -30,7 +30,7 @@ def deletion_of_harakaat(word):
 def collecting_related_words(user_text, custom_data_dict):
     words_list = [str(key) for key in custom_data_dict]
     related_words_with_scores = process.extract(str(user_text), words_list, scorer=fuzz.ratio)
-    related_words = [word for word, score in related_words_with_scores if word != user_text and score >= 70]
+    related_words = [word for word, score in related_words_with_scores if word != user_text and score >= 75]
     return related_words
 
 #handling data
@@ -67,7 +67,7 @@ async def handle_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if '-' in user_text or ' ' in user_text:
                 await update.message.reply_text(f'Sorry, For the time being I can respond to only one word per text')
             elif related_words_links:   
-                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words: \n \n {related_words_links}')
+                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words: \n \n {related_words_links}', parse_mode="HTML")
             else:
                 await update.message.reply_text(f'Sorry, This word does not exist in the dictionary')
     
@@ -85,7 +85,7 @@ async def handle_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if '-' in user_text or ' ' in user_text:
                 await update.message.reply_text(f'Sorry, For the time being I can respond to only one word per text')
             elif related_words_links:
-                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words: \n \n {related_words_links}')
+                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words: \n \n {related_words_links}', parse_mode="HTML")
             else:
                 await update.message.reply_text(f'Sorry, This word does not exist in the dictionary')
 
