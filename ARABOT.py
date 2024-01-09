@@ -60,17 +60,17 @@ async def handle_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
         custom_data_dict = handling_data(file_path)
         user_text = user_text.lower()
         related_words = collecting_related_words(user_text, custom_data_dict)
-        related_words_links = ' '.join([f'<a href="tg://sendmessage?text={word}">{code_tag(word)}</a>' for word in related_words])
+        related_words_links = ' '.join([code_tag(word) for word in related_words])
         
         if user_text in custom_data_dict:
             bot_response = ', '.join(custom_data_dict[user_text])
-            await update.message.reply_text(f'The meaning(s) of the word, {user_text} is/are \n \n {bot_response} \n \n Similar Words(Tap to copy):\n \n {related_words_links}', parse_mode="HTML")
+            await update.message.reply_text(f'The meaning(s) of the word, {user_text} is/are {bot_response} \n \n Similar Words:\n \n {related_words_links}', parse_mode="HTML")
                 
         else:
             if '-' in user_text or ' ' in user_text:
                 await update.message.reply_text(f'Sorry, For the time being I can respond to only one word per text')
             elif related_words_links:   
-                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words(Tap to copy): \n \n {related_words_links}', parse_mode="HTML")
+                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words: \n \n {related_words_links}', parse_mode="HTML")
             else:
                 await update.message.reply_text(f'Sorry, This word does not exist in the dictionary')
     
@@ -79,16 +79,16 @@ async def handle_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
         custom_data_dict = handling_data(file_path)
         user_text = deletion_of_harakaat(user_text)
         related_words = collecting_related_words(user_text, custom_data_dict)
-        related_words_links = ' '.join([f'<a href="tg://sendmessage?text={word}">{code_tag(word)}</a>' for word in related_words])
+        related_words_links = ' '.join(([code_tag(word) for word in related_words]))
 
         if user_text in custom_data_dict:
             bot_response = ', '.join(custom_data_dict[user_text])
-            await update.message.reply_text(f'The meaning(s) of the word, {user_text} is/are \n \n {bot_response} \n \n Similar Words(Tap to copy): \n \n {related_words_links}', parse_mode="HTML")
+            await update.message.reply_text(f'The meaning(s) of the word, {user_text} is/are {bot_response} \n \n Similar Words: \n \n {related_words_links}', parse_mode="HTML")
         else:
             if '-' in user_text or ' ' in user_text:
                 await update.message.reply_text(f'Sorry, For the time being I can respond to only one word per text')
             elif related_words_links:
-                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words(Tap to copy): \n \n {related_words_links}', parse_mode="HTML")
+                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words: \n \n {related_words_links}', parse_mode="HTML")
             else:
                 await update.message.reply_text(f'Sorry, This word does not exist in the dictionary')
 
