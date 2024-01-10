@@ -83,12 +83,12 @@ async def handle_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if user_text in custom_data_dict:
             bot_response = ', '.join(custom_data_dict[user_text])
-            await update.message.reply_text(f'The meaning(s) of the word, {user_text} is/are {bot_response} \n \n Similar Words: \n \n {related_words_links}', parse_mode="HTML")
+            await update.message.reply_text(f'The meaning(s) of the word, {user_text} is/are {bot_response} \n \n Similar Words(Tap to copy): \n \n {related_words_links}', parse_mode="HTML")
         else:
             if '-' in user_text or ' ' in user_text:
                 await update.message.reply_text(f'Sorry, For the time being I can respond to only one word per text')
             elif related_words_links:
-                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words: \n \n {related_words_links}', parse_mode="HTML")
+                await update.message.reply_text(f'Sorry, This word does not exist in the dictionary \n \n But here are a few similar words(Tap to copy): \n \n {related_words_links}', parse_mode="HTML")
             else:
                 await update.message.reply_text(f'Sorry, This word does not exist in the dictionary')
 
