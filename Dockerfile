@@ -5,7 +5,7 @@ FROM python:3.10.12
 ENV PYTHONUNBUFFERED=1
 
 # Set the working directory in the container
-WORKDIR /home/qaiser-server/Documents
+WORKDIR /home/qaiser-server/ARABOT
 
 # Copy the requirements file into the container
 COPY requirements.txt .
