@@ -56,7 +56,7 @@ async def handle_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return f'<code class="copyable">{escape(word)}</code>'
     user_text = update.message.text
     if isinstance(user_text, str) and user_text.isascii():
-        file_path = '/home/qaiser-server/Documents/modified_eng-ar.xlsx'
+        file_path = '/home/qaiser-server/ARABOT/modified_eng-ar.xlsx'
         custom_data_dict = handling_data(file_path)
         user_text = user_text.lower()
         related_words = collecting_related_words(user_text, custom_data_dict)
@@ -75,7 +75,7 @@ async def handle_messages(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await update.message.reply_text(f'Sorry, This word does not exist in the dictionary')
     
     elif isinstance(user_text, str) and not user_text.isascii():
-        file_path = '/home/qaiser-server/Documents/modified2_ar-eng.xlsx'
+        file_path = '/home/qaiser-server/ARABOT/modified2_ar-eng.xlsx'
         custom_data_dict = handling_data(file_path)
         user_text = deletion_of_harakaat(user_text)
         related_words = collecting_related_words(user_text, custom_data_dict)
